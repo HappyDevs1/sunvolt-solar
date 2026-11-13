@@ -82,7 +82,7 @@ async function icon(Comp, color) {
   let s = pres.addSlide({ masterName: "TITLE_DARK", sectionTitle: "Opening" });
   s.addText("Closing the Gap: Where SunVolt Can Win More Solar Backup Sales", { placeholder: "title" });
   s.addText("Customer, regional and installer analysis for the CEO and investors", { placeholder: "body" });
-  txt(s, "Presented by: ____________________", { x: 0.8, y: 6.3, w: 8, h: 0.4, fontSize: 14, color: C.background2, objectName: "Presenter" });
+  txt(s, "Presented by: Happy Mahlangu", { x: 0.8, y: 6.3, w: 8, h: 0.4, fontSize: 14, color: C.background2, objectName: "Presenter" });
   s.addNotes(
     "Good morning everyone. Today I want to show you where SunVolt Energy is winning and losing solar backup sales, and what we can do about it. " +
     "Everything I show comes from our customer data: 1,000 customers across three regions, after removing duplicate records."
