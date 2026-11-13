@@ -1,6 +1,10 @@
 """Builds report/SunVolt_Project_Report.docx from the charts and dashboard.
 Run from the project root after sunvolt_analysis.py:  python analysis/build_report.py
+
+With BODY_OUT=<path> set, the cover page is left out and the file is written to that path,
+ready for .assignment/merge.py to place into the Eduvos submission template.
 """
+import os
 from pathlib import Path
 
 from docx import Document
@@ -13,7 +17,8 @@ from docx.shared import Cm, Pt, RGBColor
 
 ROOT = Path(__file__).resolve().parents[1]
 CH = ROOT / "charts"
-OUT = ROOT / "report" / "SunVolt_Project_Report.docx"
+BODY_OUT = os.environ.get("BODY_OUT")
+OUT = Path(BODY_OUT) if BODY_OUT else ROOT / "report" / "SunVolt_Project_Report.docx"
 
 NAVY = RGBColor(0x14, 0x30, 0x4F)
 GREY = RGBColor(0x52, 0x51, 0x4E)
@@ -99,23 +104,30 @@ def table(rows, widths, header=True):
 
 
 # ------------------------------------------------------------------ cover
-t = doc.add_paragraph()
-t.alignment = WD_ALIGN_PARAGRAPH.CENTER
-t.paragraph_format.space_before = Pt(120)
-r = t.add_run("SunVolt Energy\nInternational Home Solar Backup System Analysis")
-r.bold = True
-r.font.size = Pt(22)
-r.font.color.rgb = NAVY
-t = doc.add_paragraph()
-t.alignment = WD_ALIGN_PARAGRAPH.CENTER
-r = t.add_run("ITCDA4-34 Project")
-r.font.size = Pt(14)
-t = doc.add_paragraph()
-t.alignment = WD_ALIGN_PARAGRAPH.CENTER
-t.paragraph_format.space_before = Pt(40)
-for line in ["Student name: ____________________", "Student number: ____________________", "Date: ____________________"]:
-    t.add_run(line + "\n").font.size = Pt(12)
-doc.add_page_break()
+if not BODY_OUT:
+    t = doc.add_paragraph()
+    t.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    t.paragraph_format.space_before = Pt(120)
+    r = t.add_run("SunVolt Energy\nInternational Home Solar Backup System Analysis")
+    r.bold = True
+    r.font.size = Pt(22)
+    r.font.color.rgb = NAVY
+    t = doc.add_paragraph()
+    t.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    r = t.add_run("ITCDA4-34 Project")
+    r.font.size = Pt(14)
+    t = doc.add_paragraph()
+    t.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    t.paragraph_format.space_before = Pt(40)
+    for line in ["Student name: ____________________", "Student number: ____________________", "Date: ____________________"]:
+        t.add_run(line + "\n").font.size = Pt(12)
+    doc.add_page_break()
+else:
+    t = doc.add_paragraph()
+    r = t.add_run("SunVolt Energy: International Home Solar Backup System Analysis")
+    r.bold = True
+    r.font.size = Pt(14)
+    r.font.color.rgb = NAVY
 
 # ------------------------------------------------------------------ data prep
 doc.add_heading("Data Preparation and Approach", 1)
